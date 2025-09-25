@@ -80,7 +80,7 @@ You can also find this information [here](https://rstudio-education.github.io/ds
 
 To help with our analysis we will also use a dataset on US states, which is located in your repository's `data` folder.
 
-```{r, eval = TRUE}
+```{r}
 states <- read_csv("data/states.csv")
 ```
 
@@ -109,12 +109,22 @@ We would like to limit our analysis to Denny's and La Quinta locations in the Un
     Are there any La Quinta's locations outside of the US?
     If so, which countries?
     What about Denny's?
+    
+    ANSWER: 
+    La Quinta's locations: Canada, Mexica, China, New Zealand, Georgia, Turkiye, United of Arab Emirates, Columbia, Ecuador
+    Denny's locations:Canada, Mexico, and Puerto Rico,Japan, Philippines,New Zealand, UK, Guatemala, El Salvador, Curaçao, Honduras, UAE
 
 4.  Now take a look at the data.
     What would be some ways of determining whether or not either establishment has any locations outside the US using just the data (and not the websites).
     Don't worry about whether you know how to implement this, just brainstorm some ideas.
     Write down at least one as your answer, but you're welcomed to write down a few options too.
-
+    
+    ANSWER: If we have the locations of all the La Quinta and Denny in a dataset. Then filter out locations not from the US, we will           retreived an dataset with all the locations outside of US. The code should be something like this. 
+    
+    locations %>%
+      filter(country != US)
+      
+    
 We will determine whether or not the establishment has a location outside the US using the `state` variable in the `dennys` and `laquinta` datasets.
 We know exactly which states are in the US, and we have this information in the `states` dataframe we loaded.
 
@@ -128,7 +138,8 @@ We know exactly which states are in the US, and we have this information in the 
 dennys %>%
   filter(!(state %in% states$abbreviation))
 ```
-
+    ANSWER: There is a tibble of 0x6 which mean there is no franchise of Denny outside US
+    
 6.  Add a country variable to the Denny's dataset and set all observations equal to `"United States"`. Remember, you can use the `mutate` function for adding a variable. Make sure to save the result of this as `dennys` again so that the stored data frame contains the new variable going forward.
 
 ```{marginfigure}
@@ -143,6 +154,9 @@ dennys %>%
 7.  Find the La Quinta locations that are outside the US, and figure out which country they are in.
     This might require some googling.
     Take notes, you will need to use this information in the next exercise.
+    
+    ANSWER:
+    La Quinta's locations: Canada, Mexica, China, New Zealand, Georgia, Turkiye, United of Arab Emirates, Columbia, Ecuador
 
 8.  Add a country variable to the La Quinta dataset.
     Use the `case_when` function to populate this variable.
@@ -155,11 +169,12 @@ laquinta %>%
     state %in% state.abb     ~ "United States",
     state %in% c("ON", "BC") ~ "Canada",
     state == "ANT"           ~ "Colombia",
-    ...                      # fill in the rest
+    state %in% c("AG", "CH", "NL", "PU", "QR", "SL", "VE")  ~ "Mexico",
+    state == "FM"            ~ "Honduras"
   ))
 ```
 
-🧶 ✅ ⬆️ Knit, *commit, and push your changes to GitHub with an appropriate commit message. Make sure to commit and push all changed files so that your Git pane is cleared up afterwards.*
+Knit, *commit, and push your changes to GitHub with an appropriate commit message. Make sure to commit and push all changed files so that your Git pane is cleared up afterwards.*
 
 Going forward we will work with the data from the United States only.
 All Denny's locations are in the United States, so we don't need to worry about them.
