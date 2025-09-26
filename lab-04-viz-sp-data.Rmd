@@ -63,7 +63,7 @@ We'll use the **tidyverse** package for much of the data wrangling and visualisa
 These packages are already installed for you.
 You can load them by running the following in your Console:
 
-```{r message = FALSE}
+```{r eval=TRUE}
 library(tidyverse) 
 library(dsbox) 
 library(readr)
@@ -163,7 +163,7 @@ dennys %>%
     You'll need to refer to your notes from Exercise 7 about which country the non-US locations are in.
     Here is some starter code to get you going:
 
-```{r eval = FALSE}
+```{r eval = TRUE}
 laquinta %>%
   mutate(country = case_when(
     state %in% state.abb     ~ "United States",
@@ -187,6 +187,11 @@ laquinta <- laquinta %>%
 
 9.  Which states have the most and fewest Denny's locations? What about La Quinta? Is this surprising? Why or why not?
 
+    ANSWER: 
+    For Dennys, DE has the fewest Dennys location and CA has the most franchise. 
+    For Laquinta, TX has the most location and ME has the least location. 
+    It suprising that Laquinta has most location in TX not CA. 
+
 Next, let's calculate which states have the most Denny's locations *per thousand square miles*.
 This requires *joining* information from the frequency tables you created in Exercise 8 with information from the `states` data frame.
 
@@ -204,13 +209,15 @@ dennys %>%
 Before you move on the the next question, run the code above and take a look at the output.
 In the next exercise you will need to build on this pipe.
 
+
+
 10. Which states have the most Denny's locations per thousand square miles? What about La Quinta?
 
 Next, we put the two datasets together into a single data frame.
 However before we do so, we need to add an identifier variable.
 We'll call this `establishment` and set the value to `"Denny's"` and `"La Quinta"` for the `dennys` and `laquinta` data frames, respectively.
 
-```{r}
+```{r eval=TRUE}
 dennys <- dennys %>%
   mutate(establishment = "Denny's")
 laquinta <- laquinta %>%
@@ -219,14 +226,14 @@ laquinta <- laquinta %>%
 
 Since the two data frames have the same columns, we can easily bind them with the `bind_rows` function:
 
-```{r}
+```{r eval=TRUE}
 dn_lq <- bind_rows(dennys, laquinta)
 ```
 
 We can plot the locations of the two establishments using a scatter plot, and color the points by the establishment type.
 Note that the latitude is plotted on the x-axis and the longitude on the y-axis.
 
-```{r}
+```{r eval= TRUE}
 ggplot(dn_lq, mapping = aes(x = longitude, y = latitude, color = establishment)) +
   geom_point()
 ```
@@ -237,15 +244,43 @@ See <http://ggplot2.tidyverse.org/reference/labs.html> for help with the syntax.
 You can also choose different themes to change the overall look of your plots, see <http://ggplot2.tidyverse.org/reference/ggtheme.html> for help with these.
 
 11. Filter the data for observations in North Carolina only, and recreate the plot.
-    You should also adjust the transparency of the points, by setting the `alpha` level, so that it's easier to see the overplotted ones.
+    You should also adjust the transparency of the points, by setting the `alpha` level, so that it's easier to see the overplotted ones. 
     Visually, does Mitch Hedberg's joke appear to hold here?
-
+    
+    ANSWER: It seem like Mitch Hedberg's joke appear to be true visually. Most of the Laquinta location was a few miles next to Dennys. However there are a significant amount of Dennys location compared to the Laquinta. It seem like the hostability industry is not well developed. 
+```{r eval= TRUE}
+dn_lq %>%
+  filter(state=="NC")%>%
+  ggplot(aes(x = longitude, y = latitude, color = establishment))+
+    geom_point(alpha=0.5)+
+    labs(
+      title = " Location of Denny and LaQuinta in North Carolina",
+      x = "Longtitude",
+      y = "Latitude"
+    ) +
+    theme_minimal()
+```
 12. Now filter the data for observations in Texas only, and recreate the plot, with an appropriate `alpha` level.
     Visually, does Mitch Hedberg's joke appear to hold here?
-
+    
+      ANSWER: It seem like Mitch Hedberg's joke also appear to be true visually. Opposite of North Carolina, there are a massive amount of Laquinta hotel than Dennys restaurant in Texas. However, the joke still be true where most of the Dennys restaurant seem to be open right next to the Laquinta hotel. 
+      
+```{r eval= TRUE}
+dn_lq %>%
+  filter(state=="TX")%>%
+  ggplot(aes(x = longitude, y = latitude, color = establishment))+
+    geom_point(alpha=0.5)+
+    labs(
+      color = "Establishment:",
+      title = " Location of Denny and LaQuinta in Texas",
+      x = "Longtitude",
+      y = "Latitude"
+    ) +
+    theme_minimal()
+```
 That's it for now!
 In the next lab we will take a more quantitative approach to answering these questions.
 
-🧶 ✅ ⬆️ Knit, *commit, and push your changes to GitHub with an appropriate commit message. Make sure to commit and push all changed files so that your Git pane is cleared up afterwards and review the md document on GitHub to make sure you're happy with the final state of your work.*
+Knit, *commit, and push your changes to GitHub with an appropriate commit message. Make sure to commit and push all changed files so that your Git pane is cleared up afterwards and review the md document on GitHub to make sure you're happy with the final state of your work.*
 
 Now go back through your write up to make sure you've answered all questions and all of your R chunks are properly labeled. Once you decide that you are done with the lab, choose the knit drop down and select `Knit to tufte_handout` to generate a pdf. Download and submit that pdf to Canvas. 
